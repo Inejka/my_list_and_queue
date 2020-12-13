@@ -105,10 +105,11 @@ class BidirectionalList : public List<Type> {
   }
 
   typename std::shared_ptr<typename List<Type>::Iterator> End() override {
-    if (List<Type>::last_)
+    if (List<Type>::last_) {
       return std::make_shared<Iterator>(Iterator(List<Type>::last_->next));
-    else
+    } else {
       return nullptr;
+    }
   }
 
   void Erase(typename std::shared_ptr<typename List<Type>::Iterator> &to_erase) override {
@@ -170,10 +171,11 @@ class ForwardList : public BidirectionalList<Type> {
   }
 
   typename std::shared_ptr<typename List<Type>::Iterator> End() override {
-    if (List<Type>::last_)
+    if (List<Type>::last_) {
       return std::make_shared<Iterator>(Iterator(List<Type>::last_->next));
-    else
+    } else {
       return nullptr;
+    }
   }
 
   void Erase(typename std::shared_ptr<typename List<Type>::Iterator> &to_erase) override {
@@ -193,10 +195,12 @@ class ForwardList : public BidirectionalList<Type> {
     for (; tmp != (List<Type>::last_->next); tmp = tmp->next) {
       if (tmp->next == to_erase->current_)break;
     }
-    if (tmp == (List<Type>::last_->next))return;
-    else
+    if (tmp == (List<Type>::last_->next)) {
+      return;
+    } else {
       tmp->next = tmp->next->next;
-    to_erase->current_ = tmp;
+      to_erase->current_ = tmp;
+    }
   }
 };
 
