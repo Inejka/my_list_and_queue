@@ -136,22 +136,16 @@ template<class Type>
 class ForwardList : public BidirectionalList<Type> {
  public:
   void PushBack(const Type &to_add) override {
-    if (List<Type>::first_ == List<Type>::last_ &&
-        List<Type>::first_ == nullptr) {
-      List<Type>::first_ = List<Type>::last_ =
-          std::make_shared<typename List<Type>::Node>
-              (typename List<Type>::Node(to_add));
-    } else if (List<Type>::first_ == List<Type>::last_) {
-      List<Type>::last_ = std::make_shared<typename List<Type>::Node>
+    if (List<Type>::first_ == nullptr) {
+      List<Type>::first_ = std::make_shared<typename List<Type>::Node>
           (typename List<Type>::Node(to_add));
-      List<Type>::first_->next = List<Type>::last_;
     } else {
-      List<Type>::last_->next = std::make_shared<typename List<Type>::Node>
+      auto tmp = List<Type>::first_;
+      while (tmp->next)
+        tmp = tmp->next;
+      tmp->next = std::make_shared<typename List<Type>::Node>
           (typename List<Type>::Node(to_add));
-      List<Type>::last_ = List<Type>::last_->next;
     }
-    List<Type>::last_->next = std::make_shared<typename List<Type>::Node>
-        (typename List<Type>::Node(List<Type>::last_));
   }
 
   class Iterator : public List<Type>::Iterator {
@@ -159,7 +153,7 @@ class ForwardList : public BidirectionalList<Type> {
     explicit Iterator(const std::shared_ptr<typename List<Type>::Node> &current)
         : List<Type>::Iterator(current) {}
     Iterator &operator++() override {
-      if (List<Type>::Iterator::current_->next)
+      if (List<Type>::Iterator::current_)
         List<Type>::Iterator::current_ = List<Type>::Iterator::current_->next;
     }
    private:
@@ -171,36 +165,22 @@ class ForwardList : public BidirectionalList<Type> {
   }
 
   typename std::shared_ptr<typename List<Type>::Iterator> End() override {
-    if (List<Type>::last_) {
-      return std::make_shared<Iterator>(Iterator(List<Type>::last_->next));
-    } else {
-      return nullptr;
-    }
+    return std::make_shared<Iterator>(Iterator(nullptr));
   }
 
   void Erase(typename std::shared_ptr<typename List<Type>::Iterator> &to_erase) override {
-    if (!End() || (*to_erase) == (*End()))return;
-    if ((*to_erase) == (*Begin())) {
-      if (List<Type>::first_ == List<Type>::last_) {
-        List<Type>::first_ = List<Type>::last_ = nullptr;
-        to_erase = nullptr;
-        return;
-      } else {
-        List<Type>::first_ = List<Type>::first_->next;
-        to_erase->current_ = List<Type>::first_;
-        return;
-      }
+    if (!List<Type>::first_)return;
+    if ((to_erase->current_) == List<Type>::first_) {
+      List<Type>::first_ = List<Type>::first_->next;
+      to_erase->current_ = List<Type>::first_;
+      return;
     }
     auto tmp = List<Type>::first_;
-    for (; tmp != (List<Type>::last_->next); tmp = tmp->next) {
+    for (; tmp != nullptr; tmp = tmp->next)
       if (tmp->next == to_erase->current_)break;
-    }
-    if (tmp == (List<Type>::last_->next)) {
-      return;
-    } else {
-      tmp->next = tmp->next->next;
-      to_erase->current_ = tmp;
-    }
+    if (!tmp)return;
+    tmp->next = tmp->next->next;
+    to_erase->current_ = tmp;
   }
 };
 

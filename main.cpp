@@ -48,7 +48,7 @@ void QueueTest() {
   std::cout << "\nQueueTest\n";
   std::unique_ptr<my_queue::Queue<int>> test =
       std::make_unique<my_queue::Queue<int>>
-          (my_queue::Queue<int>(std::make_unique<my_list::BidirectionalList<int>>()));  // Тут видимо я неправильно понял задание,я могу создать очередь на основе любого списка
+          (my_queue::Queue<int>(std::make_unique<my_list::ForwardList<int>>()));  // Тут видимо я неправильно понял задание,я могу создать очередь на основе любого списка
   for (int i = 0; i < 20; ++i) {
     int i1 = rand() % 10;
     std::cout << "Now adding " << i1 << " to queue\n";
