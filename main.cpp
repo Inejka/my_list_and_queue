@@ -1,8 +1,8 @@
 #include <iostream>
 #include <ctime>
 
-#include "List.h"
-#include "Queue.h"
+#include "list.h"
+#include "queue.h"
 
 void ForwardListTest();
 void BidirectionalListTest();

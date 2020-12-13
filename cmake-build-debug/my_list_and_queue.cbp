@@ -82,13 +82,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/List.h">
-			<Option target="my_list_and_queue"/>
-		</Unit>
-		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/Queue.h">
+		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/list.h">
 			<Option target="my_list_and_queue"/>
 		</Unit>
 		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/main.cpp">
+			<Option target="my_list_and_queue"/>
+		</Unit>
+		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/queue.h">
 			<Option target="my_list_and_queue"/>
 		</Unit>
 		<Unit filename="/home/inejka/CLionProjects/my_list_and_queue/CMakeLists.txt">

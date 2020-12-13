@@ -6,27 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/home/inejka/CLionProjects/my_list_and_queue/List.h
+/home/inejka/CLionProjects/my_list_and_queue/list.h
 memory
 -
 iterator
 -
-
-/home/inejka/CLionProjects/my_list_and_queue/Queue.h
-memory
--
-utility
--
-List.h
-/home/inejka/CLionProjects/my_list_and_queue/List.h
 
 /home/inejka/CLionProjects/my_list_and_queue/main.cpp
 iostream
 -
 ctime
 -
-List.h
-/home/inejka/CLionProjects/my_list_and_queue/List.h
-Queue.h
-/home/inejka/CLionProjects/my_list_and_queue/Queue.h
+list.h
+/home/inejka/CLionProjects/my_list_and_queue/list.h
+queue.h
+/home/inejka/CLionProjects/my_list_and_queue/queue.h
+
+/home/inejka/CLionProjects/my_list_and_queue/queue.h
+memory
+-
+utility
+-
+list.h
+/home/inejka/CLionProjects/my_list_and_queue/list.h
 
