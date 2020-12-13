@@ -27,9 +27,9 @@ class List {
 
  protected:
   struct Node {
-    explicit Node(const std::shared_ptr<Node> &prev) : prev(prev) {}
+    Node() = default;
     explicit Node(const Type &key) : key(key) {}
-    std::shared_ptr<Node> next = nullptr, prev = nullptr;
+    std::shared_ptr<Node> next = nullptr;
     Type key;
   };
   std::shared_ptr<Node> first_;
@@ -97,7 +97,8 @@ class ForwardList : public List<Type> {
     return std::make_shared<Iterator>(Iterator(nullptr));
   }
 
-  void Erase(typename std::shared_ptr<typename List<Type>::Iterator> &to_erase) override {
+  void Erase(typename std::shared_ptr
+      <typename List<Type>::Iterator> &to_erase) override {
     if (!List<Type>::first_)return;
     if ((to_erase->current_) == List<Type>::first_) {
       List<Type>::first_ = List<Type>::first_->next;
@@ -115,26 +116,37 @@ class ForwardList : public List<Type> {
 
 template<class Type>
 class BidirectionalList : public ForwardList<Type> {
+ protected:
+  struct ExtendedNode : public List<Type>::Node {
+    explicit ExtendedNode(const std::shared_ptr<ExtendedNode> &prev)
+        : prev(prev) {}
+    explicit ExtendedNode(const Type &to_add)
+        : List<Type>::Node(to_add) {}
+    std::shared_ptr<ExtendedNode> prev = nullptr;
+  };
+  std::shared_ptr<ExtendedNode> last_;
+
  public:
   void PushBack(const Type &to_add) override {
-    if (List<Type>::first_ == last_ &&
-        List<Type>::first_ == nullptr) {
+    auto first_ = std::static_pointer_cast<ExtendedNode>(List<Type>::first_);
+    if (List<Type>::first_ == nullptr &&
+        last_ == nullptr) {
       List<Type>::first_ = last_ =
-          std::make_shared<typename List<Type>::Node>
-              (typename List<Type>::Node(to_add));
-    } else if (List<Type>::first_ == last_) {
-      last_ = std::make_shared<typename List<Type>::Node>
-          (typename List<Type>::Node(to_add));
+          std::make_shared<ExtendedNode>
+              (ExtendedNode(to_add));
+    } else if (first_ == last_) {
+      last_ = std::make_shared<ExtendedNode>
+          (ExtendedNode(to_add));
       List<Type>::first_->next = last_;
-      last_->prev = List<Type>::first_;
+      last_->prev = first_;
     } else {
-      last_->next = std::make_shared<typename List<Type>::Node>
-          (typename List<Type>::Node(to_add));
-      last_->next->prev = last_;
-      last_ = last_->next;
+      last_->next = std::make_shared<ExtendedNode>
+          (ExtendedNode(to_add));
+      auto tmp = std::static_pointer_cast<ExtendedNode>(last_->next);
+      tmp->prev = last_;
+      last_ = tmp;
     }
-    last_->next = std::make_shared<typename List<Type>::Node>
-        (typename List<Type>::Node(last_));
+    last_->next = std::make_shared<ExtendedNode>(ExtendedNode(last_));
   }
 
   class Iterator : public List<Type>::Iterator {
@@ -146,8 +158,10 @@ class BidirectionalList : public ForwardList<Type> {
         List<Type>::Iterator::current_ = List<Type>::Iterator::current_->next;
     }
     Iterator &operator--() override {
-      if (List<Type>::Iterator::current_->prev)
-        List<Type>::Iterator::current_ = List<Type>::Iterator::current_->prev;
+      auto tmp = std::static_pointer_cast
+          <ExtendedNode>(List<Type>::Iterator::current_);
+      if (tmp->prev)
+        List<Type>::Iterator::current_ = tmp->prev;
     }
   };
 
@@ -163,26 +177,28 @@ class BidirectionalList : public ForwardList<Type> {
     }
   }
 
-  void Erase(typename std::shared_ptr<typename List<Type>::Iterator> &to_erase) override {
+  void Erase(typename std::shared_ptr
+      <typename List<Type>::Iterator> &to_erase) override {
+    auto first_ = std::static_pointer_cast<ExtendedNode>(List<Type>::first_);
     if (!End() || (*to_erase) == (*End()))return;
     if ((*to_erase) == (*Begin())) {
-      if (List<Type>::first_ == last_) {
+      if (first_ == last_) {
         List<Type>::first_ = last_ = nullptr;
         to_erase = nullptr;
         return;
       } else {
         List<Type>::first_ = List<Type>::first_->next;
-        List<Type>::first_->prev = nullptr;
+        first_->prev = nullptr;
         to_erase->current_ = List<Type>::first_;
         return;
       }
     }
-    to_erase->current_->prev->next = to_erase->current_->next;
-    to_erase->current_->next->prev = to_erase->current_->prev;
-    to_erase->current_ = to_erase->current_->prev;
+    auto tmp = std::static_pointer_cast<ExtendedNode>(to_erase->current_);
+    tmp->prev->next = tmp->next;
+    auto tmp1 = std::static_pointer_cast<ExtendedNode>(tmp->next);
+    tmp1->prev = tmp->prev;
+    to_erase->current_ = tmp->prev;
   }
- protected:
-  std::shared_ptr<typename List<Type>::Node> last_;
 };
 
 }  // namespace my_list

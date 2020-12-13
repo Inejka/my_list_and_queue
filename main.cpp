@@ -42,6 +42,12 @@ void BidirectionalListTest() {
   std::cout << "\nAfter deleting odd numbers:\n";
   for (auto i = test->Begin(); (*i) != (*test->End()); ++(*i))
     std::cout << **i << ' ';
+  std::cout << "\nGoing backwards\n";
+  auto i = test->End();
+  --(*i);
+  for (; (*i) != (*test->Begin()); --(*i))
+    std::cout << **i << ' ';
+  std::cout << **test->Begin();
 }
 
 void QueueTest() {
