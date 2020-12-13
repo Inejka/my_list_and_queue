@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/my_list_and_queue.dir/main.cpp.o  -o my_list_and_queue 

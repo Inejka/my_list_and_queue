@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/inejka/CLionProjects/my_list_and_queue/List.h
+memory
+-
+iterator
+-
+
+/home/inejka/CLionProjects/my_list_and_queue/Queue.h
+memory
+-
+utility
+-
+List.h
+/home/inejka/CLionProjects/my_list_and_queue/List.h
+
+/home/inejka/CLionProjects/my_list_and_queue/main.cpp
+iostream
+-
+ctime
+-
+List.h
+/home/inejka/CLionProjects/my_list_and_queue/List.h
+Queue.h
+/home/inejka/CLionProjects/my_list_and_queue/Queue.h
+
